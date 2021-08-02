@@ -28,6 +28,13 @@ class Student:
         result = f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_number()}\nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}"
         return result
 
+    def __lt__(self, other):
+        if self.average_number() < other:
+            print(f"У студента {self.name} средний балл за д/з ниже")
+        else:
+            print(f"У студента {self.name} средний балл за д/з выше")
+        return self.average_number() < other
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -52,6 +59,13 @@ class Lecturer(Mentor):
     def __str__(self):
         result = f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции:{self.average_number()}"
         return result
+
+    def __lt__(self, other):
+        if self.average_number() < other:
+            print(f"У лектора {self.name} средний балл за лекции ниже")
+        else:
+            print(f"У лектора {self.name} средний балл за лекции выше")
+        return self.average_number() < other
 
 
 class Reviewer(Mentor):
@@ -82,30 +96,28 @@ cool_reviewer.courses_attached += ['Python']
 best_lecturer = Lecturer("Pavel", "Pavlovich")
 best_lecturer.courses_attached += ['java']
 
-cool_reviewer.rate_hw(best_student, 'Python', 10)
-cool_reviewer.rate_hw(best_student, 'Python', 10)
-cool_reviewer.rate_hw(best_student, 'Python', 10)
+ordinary_lecturer = Lecturer("Jon", "Jonovich")
+ordinary_lecturer.courses_attached += ['Python']
 
+cool_reviewer.rate_hw(best_student, 'Python', 10)
+cool_reviewer.rate_hw(best_student, 'Python', 9)
+cool_reviewer.rate_hw(best_student, 'Python', 8)
+
+best_student.rate_hw(best_lecturer, 'java', 9)
 best_student.rate_hw(best_lecturer, 'java', 10)
-best_student.rate_hw(best_lecturer, 'java', 8)
-best_student.rate_hw(best_lecturer, 'java', 6)
+best_student.rate_hw(best_lecturer, 'java', 10)
 
 ordinary_student = Student('Lola', 'Lolovna', 'your_gender')
 ordinary_student.courses_in_progress += ['Python', 'java']
-cool_reviewer.rate_hw(ordinary_student, 'Python', 3)
-cool_reviewer.rate_hw(ordinary_student, 'Python', 5)
-cool_reviewer.rate_hw(ordinary_student, 'Python', 7)
+cool_reviewer.rate_hw(ordinary_student, 'Python', 10)
+cool_reviewer.rate_hw(ordinary_student, 'Python', 10)
+cool_reviewer.rate_hw(ordinary_student, 'Python', 10)
+
+ordinary_student.rate_hw(ordinary_lecturer, 'Python', 10)
+ordinary_student.rate_hw(ordinary_lecturer, 'Python', 8)
+ordinary_student.rate_hw(ordinary_lecturer, 'Python', 6)
 
 print(f"{cool_reviewer}\n\n{best_lecturer}\n\n{best_student}")
 
-for students in Student.registry:
-    if students.average_number() > value:
-        value = students.average_number()
-        name = students.name
-
-for lecturer in Lecturer.registry:
-    if lecturer.average_number() > value1:
-        value1 = lecturer.average_number()
-        name1 = lecturer.name
-print(f"Лучший студент: {name} с средним баллом по д/з: {value}")
-print(f"Лучший лектор: {name1} с средним баллом по лекциям: {value1}")
+is_it_lecturer = ordinary_lecturer < best_lecturer.average_number()
+is_it_student = ordinary_student < best_student.average_number()
